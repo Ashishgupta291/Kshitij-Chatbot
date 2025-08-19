@@ -4,5 +4,6 @@ streamlit-cookies-manager
 langchain-core
 langgraph
 langchain-groq
-sqlite-utils>=3.43.0
+sqlite-utils
+
 
