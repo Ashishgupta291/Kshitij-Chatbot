@@ -1,0 +1,8 @@
+streamlit
+requests-oauthlib
+streamlit-cookies-manager
+langgraph-database-backend
+langchain-core
+langgraph
+langchain-groq
+sqlite-utils>=3.43.0
