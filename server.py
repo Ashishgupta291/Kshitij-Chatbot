@@ -387,9 +387,7 @@ if st.session_state["user"] is None:
             cookies["oauth_flow"] = "1"
             #cookies["oauth_state"] = state
             cookies.save()
-            # show a link: user will be redirected back to app_url (set in secrets)
-            st.sidebar.markdown(f"[Open Google Sign-in]({auth_url})")
-            st.sidebar.info("After granting permissions you will be redirected back to the app.")
+            st.write(f'<meta http-equiv="refresh" content="0; url={auth_url}">', unsafe_allow_html=True)
         except Exception as e:
             print(e)
             st.sidebar.error("Google OAuth setup missing or invalid. Check secrets.")
@@ -493,3 +491,4 @@ if st.session_state["user"] is not None:
 else:
     st.title("Kshitij Chatbot")
     st.write("Please sign up or log in to start chatting.")
+
