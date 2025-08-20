@@ -266,7 +266,7 @@ if "reset" in query_params:
     # st.query_params
 
 # Google OAuth callback: Google will redirect to app_url with ?code=...&state=...
-if "code" in query_params and "state" in query_params:
+if "code" in query_params and "state" in query_params and cookies.get("oauth_flow") == "1":
     code = query_params.get("code")
     state = query_params.get("state")
     print(code, state)
@@ -491,6 +491,7 @@ if st.session_state["user"] is not None:
 else:
     st.title("Kshitij Chatbot")
     st.write("Please sign up or log in to start chatting.")
+
 
 
 
