@@ -385,7 +385,6 @@ if st.session_state["user"] is None:
         try:
             auth_url, state = get_auth_url_and_state()
             cookies["oauth_flow"] = "1"
-            #cookies["oauth_state"] = state
             cookies.save()
             st.write(f'<meta http-equiv="refresh" content="0; url={auth_url}">', unsafe_allow_html=True)
         except Exception as e:
@@ -491,4 +490,5 @@ if st.session_state["user"] is not None:
 else:
     st.title("Kshitij Chatbot")
     st.write("Please sign up or log in to start chatting.")
+
 
