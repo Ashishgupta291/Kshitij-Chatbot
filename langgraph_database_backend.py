@@ -5,8 +5,8 @@ from langchain_groq import ChatGroq
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph.message import add_messages
 import sqlite3
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 llm = ChatGroq(groq_api_key="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", model="llama-3.3-70b-versatile")
 
@@ -46,6 +46,7 @@ def retrieve_all_threads():
         all_threads.add(checkpoint.config['configurable']['thread_id'])
 
     return list(all_threads)
+
 
 
 
