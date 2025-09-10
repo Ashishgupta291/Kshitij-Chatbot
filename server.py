@@ -11,6 +11,9 @@ from langgraph_database_backend import chatbot, retrieve_all_threads
 from langchain_core.messages import HumanMessage
 import uuid as _uuid
 from streamlit_cookies_manager import EncryptedCookieManager
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 cookies = EncryptedCookieManager(
     prefix="langgraph_chatbot",     
@@ -54,11 +57,16 @@ def hash_password(password: str) -> str:
 def send_email_via_smtp(to_email: str, subject: str, body: str) -> bool:
     # Use Streamlit secrets if provided
     try:
-        smtp_conf = st.secrets["smtp"]
-        host = smtp_conf["host"]
-        port = int(smtp_conf.get("port", 465))
-        username = smtp_conf["username"]
-        password = smtp_conf["password"]
+        # smtp_conf = st.secrets["smtp"]
+        # host = smtp_conf["host"]
+        # port = int(smtp_conf.get("port", 465))
+        # username = smtp_conf["username"]
+        # password = smtp_conf["password"]
+
+        host = os.getenv("SMTP_HOST")
+        port = int(os.getenv("SMTP_PORT", 465))
+        username = os.getenv("SMTP_USERNAME")
+        password = os.getenv("SMTP_PASSWORD")
 
         msg = MIMEText(body, "html")
         msg["Subject"] = subject
@@ -76,7 +84,8 @@ def send_email_via_smtp(to_email: str, subject: str, body: str) -> bool:
 
 def make_verification_link(token: str, purpose: str="verify"):
     # purpose can be 'verify' or 'reset'
-    app_url = st.secrets.get("google", {}).get("app_url") if "google" in st.secrets else None
+    # app_url = st.secrets.get("google", {}).get("app_url") if "google" in st.secrets else None
+    app_url = os.getenv("APP_URL", "http://localhost:8501/")
     if not app_url:
         app_url = "http://localhost:8501/"
     # ensure trailing slash
@@ -188,8 +197,10 @@ def strip_user_prefix(thread_id: str):
 # Google OAuth helpers
 # --------------------------
 def build_google_oauth_session(state=None):
-    client_id = st.secrets["google"]["client_id"]
-    redirect_uri = st.secrets["google"]["app_url"]
+    # client_id = st.secrets["google"]["client_id"]
+    # redirect_uri = st.secrets["google"]["app_url"]
+    client_id = os.getenv("GOOGLE_CLIENT_ID")
+    redirect_uri = os.getenv("APP_URL")
     return OAuth2Session(client_id, redirect_uri=redirect_uri, scope=OAUTH_SCOPE, state=state)
 
 def get_auth_url_and_state():
@@ -202,16 +213,21 @@ def get_auth_url_and_state():
     return auth_url, state
 
 def fetch_google_token(code, state):
-    client_id = st.secrets["google"]["client_id"]
-    client_secret = st.secrets["google"]["client_secret"]
-    redirect_uri = st.secrets["google"]["app_url"]
+    # client_id = st.secrets["google"]["client_id"]
+    # client_secret = st.secrets["google"]["client_secret"]
+    # redirect_uri = st.secrets["google"]["app_url"]
+    client_id = os.getenv("GOOGLE_CLIENT_ID")
+    client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
+    redirect_uri = os.getenv("APP_URL")
     oauth = OAuth2Session(client_id, redirect_uri=redirect_uri, scope=OAUTH_SCOPE, state=state)
     token = oauth.fetch_token(OAUTH_TOKEN_URL, client_secret=client_secret, code=code)
     return token
 
 def get_google_userinfo(token):
     # token is dict
-    oauth = OAuth2Session(st.secrets["google"]["client_id"], token=token)
+    # oauth = OAuth2Session(st.secrets["google"]["client_id"], token=token)
+    client_id = os.getenv("GOOGLE_CLIENT_ID")
+    oauth = OAuth2Session(client_id, token=token)
     resp = oauth.get(OAUTH_USERINFO)
     return resp.json()
 
@@ -493,6 +509,7 @@ if st.session_state["user"] is not None:
 else:
     st.title("Kshitij Chatbot")
     st.write("Please sign up or log in to start chatting.")
+
 
 
 
