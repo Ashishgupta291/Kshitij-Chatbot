@@ -8,7 +8,7 @@ import sqlite3
 # from dotenv import load_dotenv
 # load_dotenv()
 
-llm = ChatGroq(groq_api_key="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", model="llama-3.3-70b-versatile")
+llm = ChatGroq(groq_api_key="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", model="llama-3.3-70b-versatile")
 
 
 class ChatState(TypedDict):
@@ -46,6 +46,7 @@ def retrieve_all_threads():
         all_threads.add(checkpoint.config['configurable']['thread_id'])
 
     return list(all_threads)
+
 
 
 
