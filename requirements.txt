@@ -6,5 +6,4 @@ langgraph
 langchain-groq
 sqlite-utils
 langgraph-checkpoint-sqlite
-
-
+python-dotenv
